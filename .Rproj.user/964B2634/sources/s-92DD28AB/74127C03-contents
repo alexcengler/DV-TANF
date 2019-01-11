@@ -29,8 +29,6 @@ app15_rec %>%
     geom_line(data=app15_rec_filtered, mapping=aes(color=state)) + 
     labs(x="Month", y="Total Applications (Log10)") +
     scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x),
-                labels = trans_format("log10", math_format(10^.x)))
-
-
-
-+ geom_text_repel(data=filter(app15_rec, month=="December"), mapping=aes(x=12, y=applications, label=state))
+                labels = trans_format("log10", math_format(10^.x))) +
+    geom_text_repel(data=filter(app15_rec_filtered, month=="December"), 
+                    mapping=aes(x=5, y=applications, label=state, color=state))
