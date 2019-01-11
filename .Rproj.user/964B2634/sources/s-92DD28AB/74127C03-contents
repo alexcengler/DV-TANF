@@ -3,6 +3,7 @@ library(readxl)
 library(lubridate)
 library(here)
 library(ggrepel)
+library(gghighlight)
 library(scales)
 
 ######### Reading in TANF Application Data #########
@@ -23,8 +24,8 @@ app15_rec  %<>%
 app15_rec_filtered <- filter(app15_rec, state %in% c("California", "Oregon", "Maine"))
 app15_rec %>% 
   ggplot(aes(x=month, y=applications, group=state)) + 
-    geom_point(alpha=0.6, color="#d2d2d2") + geom_line(alpha=0.6, color="#d2d2d2") +
-    geom_point(data=app15_rec_filtered, mapping=aes(color=state)) + 
+    geom_point(size=0.5, alpha=0.6, color="#d2d2d2") + geom_line(alpha=0.6, color="#d2d2d2") +
+    geom_point(data=app15_rec_filtered, mapping=aes(color=state), size=0.5) + 
     geom_line(data=app15_rec_filtered, mapping=aes(color=state)) + 
     labs(x="Month", y="Total Applications (Log10)") +
     scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x),
