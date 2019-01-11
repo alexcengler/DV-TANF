@@ -19,13 +19,17 @@ app15_rec  %<>%
   mutate(month = factor(month, levels=format(ISOdate(2018,1:12,1),"%B")))
 
 
-
+## Line charts, with log base ten, highlighting three states:
+app15_rec_filtered <- filter(app15_rec, state %in% c("California", "Oregon", "Maine"))
 app15_rec %>% 
   ggplot(aes(x=month, y=applications, group=state)) + 
-    geom_point() + geom_line() +
-    labs(x="Month", y="Total Applications") +
+    geom_point(alpha=0.6, color="#d2d2d2") + geom_line(alpha=0.6, color="#d2d2d2") +
+    geom_point(data=app15_rec_filtered, mapping=aes(color=state)) + 
+    geom_line(data=app15_rec_filtered, mapping=aes(color=state)) + 
+    labs(x="Month", y="Total Applications (Log10)") +
     scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x),
                 labels = trans_format("log10", math_format(10^.x)))
-  
 
 
+
++ geom_text_repel(data=filter(app15_rec, month=="December"), mapping=aes(x=12, y=applications, label=state))
