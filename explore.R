@@ -19,6 +19,18 @@ app15_rec  %<>%
   filter(state != "U.S. Totals" & month != "Average") %>%
   mutate(month = factor(month, levels=format(ISOdate(2018,1:12,1),"%B")))
 
+glimpse(app15_rec)
+## Basic Dplyr Review:
+#### Define dataframe once, refer to column names freely (no need for $):
+#### Chain functions with %>%
+#### Assignment with <- or%<>%
+app15_rec %>%
+  group_by(state) %>%
+  summarize(average_apps=mean(applications, na.rm=TRUE),
+            total_apps=sum(applications)) %>%
+  arrange(-total_apps) %>%
+  filter(average_apps > 5000)
+
 
 ## Line charts, with log base ten, highlighting three states:
 app15_rec_filtered <- filter(app15_rec, state %in% c("California", "Oregon", "Maine"))
