@@ -23,7 +23,7 @@ glimpse(app15_rec)
 ## Basic Dplyr Review:
 #### Define dataframe once, refer to column names freely (no need for $):
 #### Chain functions with %>%
-#### Assignment with <- or%<>%
+#### Assignment with <- or %<>%
 app15_rec %>%
   group_by(state) %>%
   summarize(average_apps=mean(applications, na.rm=TRUE),
@@ -34,7 +34,7 @@ app15_rec %>%
 
 ## Line charts, with log base ten, highlighting three states:
 app15_rec_filtered <- filter(app15_rec, state %in% c("California", "Oregon", "Maine"))
-app15_rec %>% 
+p1 <- app15_rec %>% 
   ggplot(aes(x=month, y=applications, group=state)) + 
     geom_point(size=0.5, alpha=0.6, color="#d2d2d2") + geom_line(alpha=0.6, color="#d2d2d2") +
     geom_point(data=app15_rec_filtered, mapping=aes(color=state), size=0.5) + 
@@ -44,3 +44,7 @@ app15_rec %>%
                 labels = trans_format("log10", math_format(10^.x))) +
     geom_text_repel(data=filter(app15_rec_filtered, month=="December"), 
                     mapping=aes(x=5, y=applications, label=state, color=state))
+
+## Save with ggsave to PDF:
+ggsave(here("output","plot1.pdf"), p1)
+
