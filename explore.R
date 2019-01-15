@@ -39,12 +39,14 @@ p1 <- app15_rec %>%
     geom_point(size=0.5, alpha=0.6, color="#d2d2d2") + geom_line(alpha=0.6, color="#d2d2d2") +
     geom_point(data=app15_rec_filtered, mapping=aes(color=state), size=0.5) + 
     geom_line(data=app15_rec_filtered, mapping=aes(color=state)) + 
-    labs(x="Month", y="Total Applications (Log10)") +
+    labs(title="These States Don't Stick Out Much",subtitle="Really nothing special about Maine",x="Month", y="Total Applications (Log10)") +
     scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x),
                 labels = trans_format("log10", math_format(10^.x))) +
     geom_text_repel(data=filter(app15_rec_filtered, month=="December"), 
-                    mapping=aes(x=5, y=applications, label=state, color=state))
-
+                    mapping=aes(x=5, y=applications, label=state, color=state)) + 
+    theme(axis.text.x=element_text(angle=45, hjust=1),
+          legend.position="none")
+ 
 ## Save with ggsave to PDF:
 ggsave(here("output","plot1.pdf"), p1)
 
