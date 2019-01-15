@@ -1,5 +1,6 @@
 # DV-TANF
 
+Remember to use an R Project, [R's here() package](https://github.com/jennybc/here_here), git, and a .gitignore.
 
 ## Data
 
