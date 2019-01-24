@@ -32,6 +32,10 @@ app15_rec %>%
   filter(average_apps > 5000)
 
 
+
+
+
+
 ## Line charts, with log base ten, highlighting three states:
 app15_rec_filtered <- filter(app15_rec, state %in% c("California", "Oregon", "Maine"))
 p1 <- app15_rec %>% 
@@ -42,11 +46,31 @@ p1 <- app15_rec %>%
     labs(title="These States Don't Stick Out Much",subtitle="Really nothing special about Maine",x="Month", y="Total Applications (Log10)") +
     scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x),
                 labels = trans_format("log10", math_format(10^.x))) +
+    scale_x_discrete(expand=c(0,0)) + 
     geom_text_repel(data=filter(app15_rec_filtered, month=="December"), 
                     mapping=aes(x=5, y=applications, label=state, color=state)) + 
     theme(axis.text.x=element_text(angle=45, hjust=1),
           legend.position="none")
- 
+
+
+## Or, create a new column and use that:
+app15_rec <- mutate(app15_rec, highlight_state = state %in% c("California", "Oregon", "Maine"))
+
+table(app15_rec$highlight_state)
+
+p2 <- app15_rec %>% 
+  ggplot(aes(x=month, y=applications, group=state, color=highlight_state)) + 
+  geom_point(size=0.5, alpha=0.6) + geom_line(alpha=0.6) +
+  labs(title="These States Don't Stick Out Much",subtitle="Really nothing special about Maine",x="Month", y="Total Applications (Log10)") +
+  scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x),
+                labels = trans_format("log10", math_format(10^.x))) +
+  scale_x_discrete(expand=c(0,0)) + 
+  scale_color_manual(values=c("#cccccc", "blue")) +
+  theme(axis.text.x=element_text(angle=45, hjust=1),
+        legend.position="none")
+
+
+
 ## Save with ggsave to PDF:
 ggsave(here("output","plot1.pdf"), p1)
 
